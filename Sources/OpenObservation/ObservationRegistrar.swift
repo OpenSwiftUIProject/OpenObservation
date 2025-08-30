@@ -12,7 +12,7 @@
 /// Provides storage for tracking and access to data changes.
 ///
 /// You don't need to create an instance of `ObservationRegistrar` when using
-/// the ``Observation/Observable()`` macro to indicate observability of a type.
+/// the ``OpenObservation/Observable()`` macro to indicate observability of a type.
 public struct ObservationRegistrar: Sendable {
   internal class ValueObservationStorage {
     func emit<Element>(_ element: Element) -> Bool { return false }
@@ -296,8 +296,8 @@ public struct ObservationRegistrar: Sendable {
   /// Creates an instance of the observation registrar.
   ///
   /// You don't need to create an instance of
-  /// ``Observation/ObservationRegistrar`` when using the
-  /// ``Observation/Observable()`` macro to indicate observably
+  /// ``OpenObservation/ObservationRegistrar`` when using the
+  /// ``OpenObservation/Observable()`` macro to indicate observably
   /// of a type.
   public init() {
   }

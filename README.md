@@ -34,6 +34,10 @@ dependencies: [
 ]
 ```
 
+## Documentation
+
+Comprehensive documentation is available on [Swift Package Index](https://swiftpackageindex.com/OpenSwiftUIProject/OpenObservation/main/documentation/openobservation).
+
 ## Usage
 
 ```swift
@@ -67,3 +71,5 @@ withObservationTracking {
 
 - **OpenObservation code**: MIT License
 - **Code derived from Swift project**: Apache License v2.0 with Runtime Library Exception
+
+See LICENSE file.
