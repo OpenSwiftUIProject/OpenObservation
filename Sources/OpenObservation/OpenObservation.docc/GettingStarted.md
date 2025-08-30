@@ -68,9 +68,12 @@ withObservationTracking {
 }
 
 // Later...
-todo.title = "Master Observation"  // Triggers onChange
+todo.title = "Master Observation"  // Triggers onChange (called once)
+todo.isCompleted = true  // Does NOT trigger onChange again
 todo.priority = 1  // Does NOT trigger onChange (not tracked)
 ```
+
+**Important:** The `onChange` closure is called only **once** after the first change to any tracked property. Subsequent changes to tracked properties will not trigger the closure again. To continue observing, you need to re-establish the observation tracking.
 
 ## Common Patterns
 
@@ -134,8 +137,13 @@ withObservationTracking {
     print(user.name)
     print(user.profile.bio)  // Tracks both user.profile AND profile.bio
 } onChange: {
-    print("User or profile changed")
+    print("User or profile changed")  // Called once on first change
 }
+
+// First change triggers onChange
+user.name = "Bob"  // Triggers onChange
+// Subsequent changes don't trigger
+user.profile.bio = "New bio"  // Does NOT trigger onChange again
 ```
 
 ### Ignoring Properties
@@ -208,29 +216,25 @@ class ConditionalModel {
 }
 ```
 
-### Batch Updates
+### Working with One-Shot Observations
 
-Minimize observation triggers with batch updates:
+Since `onChange` is called only once, you may need to re-establish observations:
 
 ```swift
 @Observable
-class BatchModel {
-    var items: [String] = []
-    var metadata: [String: Any] = [:]
+class RepeatingObserver {
+    var value: Int = 0
     
-    func performBatchUpdate() {
-        // All changes within withMutation are treated as one update
+    func observeContinuously() {
         withObservationTracking {
-            items.append("New Item")
-            metadata["count"] = items.count
-            metadata["lastUpdate"] = Date()
-        } onChange: {
-            // Fires once after all changes
-            print("Batch update completed")
+            print("Current value: \(value)")
+        } onChange: { [weak self] in
+            print("Value changed!")
+            // Re-establish observation for next change
+            self?.observeContinuously()
         }
     }
 }
-```
 
 ## Best Practices
 
@@ -346,7 +350,22 @@ withObservationTracking {
 
 ### onChange Not Firing
 
-Ensure the observed object is retained:
+Remember that `onChange` is called only once. Common issues:
+
+1. **One-shot behavior**: The `onChange` closure fires only once after the first change:
+
+```swift
+withObservationTracking {
+    print(model.value)
+} onChange: {
+    print("Changed!")  // Only called once
+}
+
+model.value = 1  // Triggers onChange
+model.value = 2  // Does NOT trigger onChange again
+```
+
+2. **Object retention**: Ensure the observed object is retained:
 
 ```swift
 // Wrong: Object might be deallocated
@@ -367,7 +386,8 @@ class Controller {
         withObservationTracking {
             print(model.value)
         } onChange: {
-            // Will fire as long as controller exists
+            // Will fire once when model.value changes
+            self.setupObservation()  // Re-establish for continuous observation
         }
     }
 }
