@@ -34,13 +34,16 @@ dependencies: [
 ]
 ```
 
+## Documentation
+
+Comprehensive documentation is available on [Swift Package Index](https://swiftpackageindex.com/OpenSwiftUIProject/OpenObservation/main/documentation/openobservation).
+
 ## Usage
 
 ```swift
 import OpenObservation
 
-@Observable
-class Counter {
+@Observableclass Counter {
     var value: Int = 0
     
     func increment() {
