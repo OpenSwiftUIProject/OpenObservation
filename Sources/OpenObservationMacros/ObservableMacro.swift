@@ -100,7 +100,7 @@ struct ObservationDiagnostic: DiagnosticMessage {
 }
 
 extension DiagnosticsError {
-  init<S: SyntaxProtocol>(syntax: S, message: String, domain: String = "Observation", id: ObservationDiagnostic.ID, severity: SwiftDiagnostics.DiagnosticSeverity = .error) {
+  init<S: SyntaxProtocol>(syntax: S, message: String, domain: String = "OpenObservation", id: ObservationDiagnostic.ID, severity: SwiftDiagnostics.DiagnosticSeverity = .error) {
     self.init(diagnostics: [
       Diagnostic(node: Syntax(syntax), message: ObservationDiagnostic(message: message, domain: domain, id: id, severity: severity))
     ])
