@@ -18,8 +18,9 @@ func _tlsGet() -> UnsafeMutableRawPointer?
 @_silgen_name("_swift_openobservation_tls_set")
 func _tlsSet(_ value: UnsafeMutableRawPointer?)
 
-struct _ThreadLocal {
-  static var value: UnsafeMutableRawPointer? {
+@_spi(OpenSwiftUI)
+public struct _ThreadLocal {
+  public static var value: UnsafeMutableRawPointer? {
     get {
       return _tlsGet()
     }
@@ -46,8 +47,9 @@ import Bionic
 #error("Unsupported platform")
 #endif
 
-struct _ThreadLocal {
-  static var value: UnsafeMutableRawPointer? {
+@_spi(OpenSwiftUI)
+public struct _ThreadLocal {
+  public static var value: UnsafeMutableRawPointer? {
     get {
       #if canImport(Darwin)
       return pthread_getspecific(key.key)
