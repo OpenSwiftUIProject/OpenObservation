@@ -6,13 +6,17 @@ import PackageDescription
 
 func envEnable(_ key: String, default defaultValue: Bool = false) -> Bool {
     guard let value = Context.environment[key] else {
+        print("[env] \(key) not set, using default: \(defaultValue)")
         return defaultValue
     }
     if value == "1" {
+        print("[env] \(key)=1, enabled")
         return true
     } else if value == "0" {
+        print("[env] \(key)=0, disabled")
         return false
     } else {
+        print("[env] \(key)=\(value), using default: \(defaultValue)")
         return defaultValue
     }
 }
