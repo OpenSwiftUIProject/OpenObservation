@@ -2,6 +2,8 @@
 //  OpenObservationMacroTests.swift
 //  OpenObservationTests
 //
+//  Created by Kyle on 2025/8/30.
+//
 
 import SwiftSyntax
 import SwiftSyntaxBuilder
@@ -19,9 +21,49 @@ let testMacros: [String: Macro.Type] = [
     "ObservationIgnored": ObservationIgnoredMacro.self,
 ]
 
+let testMacroSpecs: [String: MacroSpec] = [
+    "Observable": .init(type: ObservableMacro.self, conformances: ["Observable"]),
+]
+
 #endif
 
 final class OpenObservationMacroTests: XCTestCase {
+    func testBasicObservableExtension() throws {
+        #if canImport(OpenObservationMacros)
+        assertMacroExpansion(
+            """
+            @Observable
+            class Model {}
+            """,
+            expandedSource: """
+            class Model {
+
+                @ObservationIgnored private let _$observationRegistrar = OpenObservation.ObservationRegistrar()
+
+                internal nonisolated func access<Member>(
+                    keyPath: KeyPath<Model, Member>
+                ) {
+                    _$observationRegistrar.access(self, keyPath: keyPath)
+                }
+
+                internal nonisolated func withMutation<Member, MutationResult>(
+                    keyPath: KeyPath<Model, Member>,
+                    _ mutation: () throws -> MutationResult
+                ) rethrows -> MutationResult {
+                    try _$observationRegistrar.withMutation(of: self, keyPath: keyPath, mutation)
+                }
+            }
+            
+            extension Model: OpenObservation.Observable {
+            }
+            """,
+            macroSpecs: testMacroSpecs
+        )
+        #else
+        throw XCTSkip("macros are only supported when running tests for the host platform")
+        #endif
+    }
+
     func testBasicObservable() throws {
         #if canImport(OpenObservationMacros)
         assertMacroExpansion(
