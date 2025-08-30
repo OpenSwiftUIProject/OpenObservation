@@ -1,6 +1,14 @@
 # OpenObservation
 
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FOpenSwiftUIProject%2FOpenObservation%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/OpenSwiftUIProject/OpenObservation)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2FOpenSwiftUIProject%2FOpenObservation%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/OpenSwiftUIProject/OpenObservation)
+
 Backport implementation of Swift's Observation framework with access to `@_spi(SwiftUI)` APIs.
+
+| **CI Status** |
+|---|
+|[![macOS](https://github.com/OpenSwiftUIProject/OpenObservation/actions/workflows/macos.yml/badge.svg)](https://github.com/OpenSwiftUIProject/OpenObservation/actions/workflows/macos.yml)|
+|[![Ubuntu](https://github.com/OpenSwiftUIProject/OpenObservation/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/OpenSwiftUIProject/OpenObservation/actions/workflows/ubuntu.yml)|
 
 ## Purpose
 

@@ -1,0 +1,31 @@
+name: Ubuntu 
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ubuntu_test:
+    name: Build OpenObservation on Ubuntu
+    strategy:
+      fail-fast: false
+      matrix:
+        swift_version: ["6.1.2"]
+    runs-on: ubuntu-22.04
+    env:
+      OPENOBSERVATION_WERROR: 1
+      OPENOBSERVATION_DEVELOPMENT: 0
+    container: swift:${{ matrix.swift_version }}-jammy
+    steps:
+      - uses: actions/checkout@v4
+      - name: Swift version
+        run: |
+          which swift && swift --version
+      - name: Build in debug mode
+        run: |
+          swift build -c debug
+      - name: Build in release mode
+        run: |
+          swift build -c release
