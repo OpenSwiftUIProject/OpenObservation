@@ -1,0 +1,60 @@
+# OpenObservation
+
+Backport implementation of Swift's Observation framework with access to `@_spi(SwiftUI)` APIs.
+
+## Purpose
+
+The official Observation framework in Swift Toolchain doesn't ship with `package.swiftinterface`, preventing direct use of `@_spi(SwiftUI)` APIs. There are two solutions to this problem, but this project provides solution 2:
+
+1. **Manual workaround** (not included): Construct a `package.swiftinterface` and add it to the toolchain (⚠️ No API stability, may break between toolchain versions)
+
+2. **OpenObservation approach** (this project): Reimplement Observation framework, allowing OpenSwiftUI to import it via `@_spi(OpenSwiftUI)`
+
+## Features
+
+- Full Observation framework implementation
+- Cross-platform support (macOS, iOS, tvOS, watchOS)
+- `@Observable` macro support
+- Thread-safe tracking
+- Pure Swift fallback for platforms without toolchain support
+
+## Installation
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/OpenSwiftUIProject/OpenObservation", from: "1.0.0")
+]
+```
+
+## Usage
+
+```swift
+import OpenObservation
+
+@Observable
+class Counter {
+    var value: Int = 0
+    
+    func increment() {
+        value += 1
+    }
+}
+
+// Use with ObservationTracking
+let counter = Counter()
+withObservationTracking {
+    print("Counter value: \(counter.value)")
+} onChange: {
+    print("Counter changed!")
+}
+```
+
+## Configuration
+
+- `OPENOBSERVATION_SWIFT_TOOLCHAIN_SUPPORTED`: Enable C++ runtime (auto-detected)
+- `OPENOBSERVATION_DEVELOPMENT`: Development mode
+
+## License
+
+- **OpenObservation code**: MIT License
+- **Code derived from Swift project**: Apache License v2.0 with Runtime Library Exception
