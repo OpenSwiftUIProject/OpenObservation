@@ -43,7 +43,8 @@ Comprehensive documentation is available on [Swift Package Index](https://swiftp
 ```swift
 import OpenObservation
 
-@Observableclass Counter {
+@Observable
+class Counter {
     var value: Int = 0
     
     func increment() {
@@ -70,3 +71,5 @@ withObservationTracking {
 
 - **OpenObservation code**: MIT License
 - **Code derived from Swift project**: Apache License v2.0 with Runtime Library Exception
+
+See LICENSE file.
