@@ -23,7 +23,6 @@ This framework is particularly useful when:
 ### Observation Tracking
 
 - ``withObservationTracking(_:onChange:)``
-- ``ObservationTracking``
 
 ### Advanced Usage
 
