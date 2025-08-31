@@ -18,6 +18,10 @@ The official Observation framework in Swift Toolchain doesn't ship with `package
 
 2. **OpenObservation approach** (this project): Reimplement Observation framework, allowing OpenSwiftUI to import it via `@_spi(OpenSwiftUI)`
 
+## Implementation Status
+
+The current implementation is aligned with Swift's **release/6.1 branch** implementation of the Observation framework.
+
 ## Features
 
 - Full Observation framework implementation
