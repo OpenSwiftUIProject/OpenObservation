@@ -67,8 +67,8 @@ withObservationTracking {
 
 ## Configuration
 
-- `OPENOBSERVATION_SWIFT_TOOLCHAIN_SUPPORTED`: Enable Swift toolchain runtime implementation (auto-detected)
-    - Config `OPENOBSERVATION_SWIFT_TOOLCHAIN_PATH` and `OPENOBSERVATION_SWIFT_TOOLCHAIN_VERSION`
+- `OPENSWIFTUI_SWIFT_TOOLCHAIN_SUPPORTED`: Enable Swift toolchain runtime implementation (auto-detected)
+    - Config `OPENSWIFTUI_SWIFT_TOOLCHAIN_PATH` and `OPENSWIFTUI_SWIFT_TOOLCHAIN_VERSION`
 - `OPENOBSERVATION_DEVELOPMENT`: Development mode
 
 ## License

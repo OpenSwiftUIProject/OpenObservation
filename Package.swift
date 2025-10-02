@@ -21,6 +21,13 @@ func envEnable(_ key: String, default defaultValue: Bool = false) -> Bool {
     }
 }
 
+#if os(macOS)
+// NOTE: #if os(macOS) check is not accurate if we are cross compiling for Linux platform. So we add an env key to specify it.
+let buildForDarwinPlatform = envEnable("OPENSWIFTUI_BUILD_FOR_DARWIN_PLATFORM", default: true)
+#else
+let buildForDarwinPlatform = envEnable("OPENSWIFTUI_BUILD_FOR_DARWIN_PLATFORM")
+#endif
+
 var sharedCXXSettings: [CXXSetting] = []
 var sharedSwiftSettings: [SwiftSetting] = [
     .swiftLanguageMode(.v5),
@@ -28,7 +35,7 @@ var sharedSwiftSettings: [SwiftSetting] = [
 
 let development = envEnable("OPENOBSERVATION_DEVELOPMENT", default: false)
 
-// MARK: [env] OPENGRAPH_SWIFT_TOOLCHAIN_PATH
+// MARK: [env] OPENSWIFTUI_SWIFT_TOOLCHAIN_PATH
 
 // Modified from: https://github.com/swiftlang/swift/blob/main/SwiftCompilerSources/Package.swift
 //
@@ -43,7 +50,7 @@ let development = envEnable("OPENOBSERVATION_DEVELOPMENT", default: false)
 //
 // where <$OPENGRAPH_SWIFT_TOOLCHAIN_PATH> is the parent directory of the swift repository.
 
-let swiftToolchainPath = Context.environment["OPENOBSERVATION_SWIFT_TOOLCHAIN_PATH"] ?? (development ? "/Volumes/BuildMachine/swift-project" : "")
+let swiftToolchainPath = Context.environment["OPENSWIFTUI_SWIFT_TOOLCHAIN_PATH"] ?? (development ? "/Volumes/BuildMachine/swift-project" : "")
 if !swiftToolchainPath.isEmpty {
     sharedCXXSettings.append(
         .unsafeFlags(
@@ -65,21 +72,31 @@ if !swiftToolchainPath.isEmpty {
     )
 }
 
-// MARK: [env] OPENOBSERVATION_SWIFT_TOOLCHAIN_VERSION
+// MARK: [env] OPENSWIFTUI_SWIFT_TOOLCHAIN_VERSION
 
-let swiftToolchainVersion = Context.environment["OPENOBSERVATION_SWIFT_TOOLCHAIN_VERSION"] ?? (development ? "6.0.2" : "")
+let swiftToolchainVersion = Context.environment["OPENSWIFTUI_SWIFT_TOOLCHAIN_VERSION"] ?? (development ? "6.0.2" : "")
 if !swiftToolchainVersion.isEmpty {
     sharedCXXSettings.append(
-        .define("OPENOBSERVATION_SWIFT_TOOLCHAIN_VERSION", to: swiftToolchainVersion)
+        .define("OPENSWIFTUI_SWIFT_TOOLCHAIN_VERSION", to: swiftToolchainVersion)
     )
 }
 
-// MARK: - [env] OPENOBSERVATION_SWIFT_TOOLCHAIN_SUPPORTED
+// MARK: - [env] OPENSWIFTUI_SWIFT_TOOLCHAIN_SUPPORTED
 
-let swiftToolchainSupported = envEnable("OPENOBSERVATION_SWIFT_TOOLCHAIN_SUPPORTED", default: !swiftToolchainVersion.isEmpty)
+let swiftToolchainSupported = envEnable("OPENSWIFTUI_SWIFT_TOOLCHAIN_SUPPORTED", default: !swiftToolchainVersion.isEmpty)
 if swiftToolchainSupported {
-    sharedCXXSettings.append(.define("OPENOBSERVATION_SWIFT_TOOLCHAIN_SUPPORTED"))
-    sharedSwiftSettings.append(.define("OPENOBSERVATION_SWIFT_TOOLCHAIN_SUPPORTED"))
+    sharedCXXSettings.append(.define("OPENSWIFTUI_SWIFT_TOOLCHAIN_SUPPORTED"))
+    sharedSwiftSettings.append(.define("OPENSWIFTUI_SWIFT_TOOLCHAIN_SUPPORTED"))
+}
+
+// MARK: - [env] OPENSWIFTUI_LIBRARY_EVOLUTION
+
+let libraryEvolutionCondition = envEnable("OPENSWIFTUI_LIBRARY_EVOLUTION", default: buildForDarwinPlatform)
+
+if libraryEvolutionCondition {
+    // NOTE: -enable-library-evolution will cause module verify failure for `swift build`.
+    // Either set OPENATTRIBUTEGRAPH_LIBRARY_EVOLUTION=0 or add `-Xswiftc -no-verify-emitted-module-interface` after `swift build`
+    sharedSwiftSettings.append(.unsafeFlags(["-enable-library-evolution", "-no-verify-emitted-module-interface"]))
 }
 
 let package = Package(
