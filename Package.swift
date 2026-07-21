@@ -107,7 +107,7 @@ let package = Package(
         .executable(name: "OpenObservationClient", targets: ["OpenObservationClient"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/swiftlang/swift-syntax", "601.0.0"..<"602.0.0"),
+        .package(url: "https://github.com/swiftlang/swift-syntax", "603.0.0"..<"604.0.0"),
     ],
     targets: [
         .macro(
