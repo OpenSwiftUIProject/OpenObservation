@@ -104,6 +104,7 @@ let package = Package(
     platforms: [.macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6), .macCatalyst(.v13)],
     products: [
         .library(name: "OpenObservation", targets: ["OpenObservation"]),
+        .library(name: "OpenObservationMacroPlugin", targets: ["OpenObservationMacros"]),
         .executable(name: "OpenObservationClient", targets: ["OpenObservationClient"]),
     ],
     dependencies: [
@@ -119,7 +120,9 @@ let package = Package(
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
                 .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
             ],
-            swiftSettings: sharedSwiftSettings
+            // The host macro plugin does not need library evolution. Keep its settings
+            // free of unsafe flags so other packages can use this product by version.
+            swiftSettings: [.swiftLanguageMode(.v5)]
         ),
         .target(
             name: "OpenObservation",
