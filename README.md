@@ -42,6 +42,10 @@ dependencies: [
 
 Comprehensive documentation is available on [Swift Package Index](https://swiftpackageindex.com/OpenSwiftUIProject/OpenObservation/main/documentation/openobservation).
 
+See [Using module selectors with OpenObservation](Docs/ModuleSelectors.md) for
+files that also import Observation, UIKit, AppKit, or a module that re-exports
+them.
+
 ## Usage
 
 ```swift

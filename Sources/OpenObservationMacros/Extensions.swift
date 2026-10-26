@@ -14,6 +14,15 @@ import SwiftSyntaxMacros
 import SwiftDiagnostics
 import SwiftSyntaxBuilder
 
+extension AttributeSyntax {
+  func isMacroApplication(_ name: String) -> Bool {
+    let tokens = attributeName.tokens(viewMode: .all).map({ $0.tokenKind })
+    return tokens == [.identifier(name)] ||
+      tokens == [.identifier(ObservableMacro.moduleName), .period, .identifier(name)] ||
+      tokens == [.identifier(ObservableMacro.moduleName), .colonColon, .identifier(name)]
+  }
+}
+
 extension VariableDeclSyntax {
   var identifierPattern: IdentifierPatternSyntax? {
     bindings.first?.pattern.as(IdentifierPatternSyntax.self)
@@ -97,7 +106,7 @@ extension VariableDeclSyntax {
     for attribute in attributes {
       switch attribute {
       case .attribute(let attr):
-        if attr.attributeName.tokens(viewMode: .all).map({ $0.tokenKind }) == [.identifier(name)] {
+        if attr.isMacroApplication(name) {
           return true
         }
       default:
