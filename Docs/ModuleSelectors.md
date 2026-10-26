@@ -24,13 +24,15 @@ OpenObservation and Apple's Observation module both define `Observable`,
 imports Observation, the compiler cannot choose between these macros by name.
 This can produce an `Ambiguous use of 'Observable()'` diagnostic.
 
-Observation can also be imported indirectly. UIKit and AppKit re-export it,
-so importing either framework can introduce the same conflict without an
-explicit `import Observation` statement. The same applies when another module,
-such as OpenSwiftUI, re-exports UIKit or AppKit.
+Observation can also be imported indirectly. Foundation re-exports it, and
+UIKit and AppKit import Foundation. Importing these frameworks can therefore
+introduce the same conflict without an explicit `import Observation` statement.
+Other modules that re-export these frameworks can introduce the conflict too.
 
 ## Select the OpenObservation macros explicitly
 
+OpenObservation requires a Swift 6.3 or later compiler, which supports module
+selectors ([SE-0491](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0491-module-selectors.md)).
 Add the `OpenObservation::` module selector to each OpenObservation macro you
 write in a file where both modules are visible:
 

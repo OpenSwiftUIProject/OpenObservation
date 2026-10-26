@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        swift_version: ["6.1.2"]
+        swift_version: ["6.3.3"]
     runs-on: ubuntu-22.04
     env:
       OPENOBSERVATION_WERROR: 1
@@ -29,3 +29,5 @@ jobs:
       - name: Build in release mode
         run: |
           swift build -c release
+      - name: Run macro tests
+        run: swift test --filter OpenObservationMacroTests

@@ -32,6 +32,8 @@ The current implementation is aligned with Swift's **release/6.1 branch** implem
 
 ## Installation
 
+Requires a Swift 6.3 or later compiler.
+
 ```swift
 dependencies: [
     .package(url: "https://github.com/OpenSwiftUIProject/OpenObservation", from: "1.0.0")
