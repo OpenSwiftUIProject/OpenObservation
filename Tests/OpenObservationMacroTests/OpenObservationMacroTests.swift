@@ -38,7 +38,7 @@ final class OpenObservationMacroTests: XCTestCase {
             expandedSource: """
             class Model {
 
-                @ObservationIgnored private let _$observationRegistrar = OpenObservation.ObservationRegistrar()
+                @OpenObservation::ObservationIgnored private let _$observationRegistrar = OpenObservation.ObservationRegistrar()
 
                 internal nonisolated func access<Member>(
                     keyPath: KeyPath<Model, Member>
@@ -132,6 +132,8 @@ final class OpenObservationMacroTests: XCTestCase {
                         yield &_name
                     }
                 }
+
+                private  var _name: String = "John"
                 var age: Int {
                     @storageRestrictions(initializes: _age)
                     init(initialValue) {
@@ -155,6 +157,8 @@ final class OpenObservationMacroTests: XCTestCase {
                         yield &_age
                     }
                 }
+
+                private  var _age: Int = 30
 
                 private let _$observationRegistrar = OpenObservation.ObservationRegistrar()
 
@@ -214,6 +218,8 @@ final class OpenObservationMacroTests: XCTestCase {
                         yield &_tracked
                     }
                 }
+
+                private  var _tracked: String = "tracked"
                 var ignored: Int = 42
 
                 private let _$observationRegistrar = OpenObservation.ObservationRegistrar()
@@ -276,6 +282,8 @@ final class OpenObservationMacroTests: XCTestCase {
                         yield &_stored
                     }
                 }
+
+                private  var _stored: String = "stored"
                 var computed: String {
                     return stored + " computed"
                 }
@@ -338,6 +346,8 @@ final class OpenObservationMacroTests: XCTestCase {
                         yield &_explicit
                     }
                 }
+
+                private  var _explicit: String = "explicit"
                 var implicit: Int {
                     @storageRestrictions(initializes: _implicit)
                     init(initialValue) {
@@ -361,6 +371,8 @@ final class OpenObservationMacroTests: XCTestCase {
                         yield &_implicit
                     }
                 }
+
+                private  var _implicit: Int = 10
 
                 private let _$observationRegistrar = OpenObservation.ObservationRegistrar()
 
@@ -422,6 +434,8 @@ final class OpenObservationMacroTests: XCTestCase {
                     }
                 }
 
+                private  var _variable: Int = 10
+
                 private let _$observationRegistrar = OpenObservation.ObservationRegistrar()
 
                 internal nonisolated func access<Member>(
@@ -481,6 +495,8 @@ final class OpenObservationMacroTests: XCTestCase {
                         yield &_publicProp
                     }
                 }
+
+                private  var _publicProp: String = "public"
                 internal var internalProp: Int {
                     @storageRestrictions(initializes: _internalProp)
                     init(initialValue) {
@@ -504,6 +520,8 @@ final class OpenObservationMacroTests: XCTestCase {
                         yield &_internalProp
                     }
                 }
+
+                private  var _internalProp: Int = 10
                 private var privateProp: Bool {
                     @storageRestrictions(initializes: _privateProp)
                     init(initialValue) {
@@ -527,6 +545,8 @@ final class OpenObservationMacroTests: XCTestCase {
                         yield &_privateProp
                     }
                 }
+
+                private  var _privateProp: Bool = true
 
                 private let _$observationRegistrar = OpenObservation.ObservationRegistrar()
 
@@ -588,6 +608,8 @@ final class OpenObservationMacroTests: XCTestCase {
                     }
                 }
 
+                private  var _name: String = "test"
+
                 private let _$observationRegistrar = OpenObservation.ObservationRegistrar()
 
                 internal nonisolated func access<Member>(
@@ -647,6 +669,8 @@ final class OpenObservationMacroTests: XCTestCase {
                         yield &_instanceProp
                     }
                 }
+
+                private  var _instanceProp: Int = 10
 
                 private let _$observationRegistrar = OpenObservation.ObservationRegistrar()
 

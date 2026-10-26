@@ -39,7 +39,7 @@ public struct ObservableMacro {
   static func registrarVariable(_ observableType: TokenSyntax) -> DeclSyntax {
     return
       """
-      @\(raw: ignoredMacroName) private let \(raw: registrarVariableName) = \(raw: qualifiedRegistrarTypeName)()
+      @\(raw: moduleName)::\(raw: ignoredMacroName) private let \(raw: registrarVariableName) = \(raw: qualifiedRegistrarTypeName)()
       """
   }
   
@@ -70,7 +70,10 @@ public struct ObservableMacro {
     AttributeSyntax(
       leadingTrivia: .space,
       atSign: .atSignToken(),
-      attributeName: IdentifierTypeSyntax(name: .identifier(ignoredMacroName)),
+      attributeName: IdentifierTypeSyntax(
+        moduleSelector: ModuleSelectorSyntax(moduleName: .identifier(moduleName)),
+        name: .identifier(ignoredMacroName)
+      ),
       trailingTrivia: .space
     )
   }
@@ -172,8 +175,15 @@ extension PatternBindingListSyntax {
 }
 
 extension VariableDeclSyntax {
-  func privatePrefixed(_ prefix: String, addingAttribute attribute: AttributeSyntax) -> VariableDeclSyntax {
-    let newAttributes = attributes + [.attribute(attribute)]
+  func privatePrefixed(_ prefix: String, addingAttribute attribute: AttributeSyntax, removingMacro name: String) -> VariableDeclSyntax {
+    let newAttributes = attributes.filter { attribute in
+      switch attribute {
+      case .attribute(let attr):
+        return !attr.isMacroApplication(name)
+      default:
+        return true
+      }
+    } + [.attribute(attribute)]
     return VariableDeclSyntax(
       leadingTrivia: leadingTrivia,
       attributes: newAttributes,
@@ -252,7 +262,10 @@ extension ObservableMacro: MemberAttributeMacro {
     
     
     return [
-      AttributeSyntax(attributeName: IdentifierTypeSyntax(name: .identifier(ObservableMacro.trackedMacroName)))
+      AttributeSyntax(attributeName: IdentifierTypeSyntax(
+        moduleSelector: ModuleSelectorSyntax(moduleName: .identifier(ObservableMacro.moduleName)),
+        name: .identifier(ObservableMacro.trackedMacroName)
+      ))
     ]
   }
 }
@@ -356,12 +369,15 @@ extension ObservationTrackedMacro: PeerMacro {
       return []
     }
     
-    if property.hasMacroApplication(ObservableMacro.ignoredMacroName) ||
-       property.hasMacroApplication(ObservableMacro.trackedMacroName) {
+    if property.hasMacroApplication(ObservableMacro.ignoredMacroName) {
       return []
     }
     
-    let storage = DeclSyntax(property.privatePrefixed("_", addingAttribute: ObservableMacro.ignoredAttribute))
+    let storage = DeclSyntax(property.privatePrefixed(
+      "_",
+      addingAttribute: ObservableMacro.ignoredAttribute,
+      removingMacro: ObservableMacro.trackedMacroName
+    ))
     return [storage]
   }
 }
